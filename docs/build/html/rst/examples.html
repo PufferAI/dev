@@ -279,7 +279,6 @@
             <span class="n">env_creator</span><span class="o">=</span><span class="n">make_env</span><span class="p">,</span>
             <span class="n">default_args</span><span class="o">=</span><span class="p">[</span><span class="n">env_name</span><span class="p">,</span> <span class="n">framestack</span><span class="p">],</span>
             <span class="n">env_name</span><span class="o">=</span><span class="n">env_name</span><span class="p">,</span>
-            <span class="n">env_includes_reset</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">emulate_flat_atn</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">record_episode_statistics</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
@@ -1049,6 +1048,9 @@
     <span class="n">envs</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
+    <span class="k">if</span> <span class="n">track</span><span class="p">:</span>
+        <span class="n">wandb</span><span class="o">.</span><span class="n">finish</span><span class="p">()</span>
+
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">__debug__</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;WARNING: Running in debug mode. This will be slower than normal due to extensive checks in PufferLib emulation. Run with -O to disable debug mode.&#39;</span><span class="p">)</span>
@@ -1131,7 +1133,7 @@
                 <span class="n">num_envs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
                 <span class="n">num_buffers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                 <span class="n">cuda</span><span class="o">=</span><span class="n">cuda</span><span class="p">,</span>
-                <span class="n">total_timesteps</span><span class="o">=</span><span class="mi">10_000_000</span><span class="p">,</span>
+                <span class="n">total_timesteps</span><span class="o">=</span><span class="mi">30_000</span><span class="p">,</span>
                 <span class="n">track</span><span class="o">=</span><span class="n">track</span><span class="p">,</span>
                 <span class="n">wandb_project_name</span><span class="o">=</span><span class="s1">&#39;pufferlib&#39;</span><span class="p">,</span>
                 <span class="n">wandb_entity</span><span class="o">=</span><span class="s1">&#39;jsuarez&#39;</span><span class="p">,</span>
