@@ -6,6 +6,7 @@
     <center>
       <video width=100% height="auto" nocontrols autoplay muted loop>
         <source src="_static/banner.webm" type="video/webm">
+        <source src="_static/banner.mp4" type="video/mp4">
         Your browser does not support this video.
       </video>
     </center>
