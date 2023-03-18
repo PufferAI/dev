@@ -1,9 +1,14 @@
-.. image:: /resource/header.png
-
-|
-
 .. role:: python(code)
     :language: python
+
+.. raw:: html
+
+    <center>
+      <video width=100% height="auto" nocontrols autoplay muted loop>
+        <source src="_static/banner.webm" type="video/webm">
+        Your browser does not support this video.
+      </video>
+    </center>
 
 **Quick links:** `Github <https://github.com/pufferai/pufferlib>`_ | `Baselines <https://api.wandb.ai/links/jsuarez/wue9qkr0>`_ | `Discord <https://discord.gg/spT4huaGYV>`_ | `Twitter <https://twitter.com/jsuarez5341>`_
 
