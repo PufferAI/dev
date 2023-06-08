@@ -22,7 +22,6 @@ Join our community `Discord <https://discord.gg/spT4huaGYV>`_ to get support or 
 
 .. literalinclude:: ../../../../pufferlib/tests/test_docs_nmmo.py
 
- 
 Installation
 ############
 
@@ -69,6 +68,16 @@ Authorship
 Contributing
 ############
 
+.. dropdown:: List of Contributors
+
+   **Joseph Suarez**: Creator and developer of PufferLib
+
+   **Nick Jenkins**: Layout for the system architecture diagram. Adversary.design.
+
+   **Andranik Tigranyan**: Streamline and animate the pufferfish. Hire him on UpWork if you like what you see here.
+
+   **Sara Earle**: Original pufferfish model. Hire her on UpWork if you like what you see here.
+ 
 We welcome contributions from the community. Please communicate with us on `Discord <https://discord.gg/spT4huaGYV>`_ before opening an issue or pull request on Github. We are particularly interested in contributions to the following areas:
 
 | **Framework bindings:** We currently support CleanRL and RLLib. We would like to add bindings for other frameworks such as Stable Baselines and Tianshou.

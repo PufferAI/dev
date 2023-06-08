@@ -4,11 +4,11 @@
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
-  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>pufferlib.registry.atari module &mdash; PufferLib v0.2.0 0.2.0 documentation</title>
+  <title>pufferlib.registry.atari module &mdash; PufferLib v0.3.0 0.3.0 documentation</title>
   
 
   
@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
 
   
   
@@ -37,7 +38,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/design-tabs.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -57,7 +58,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> PufferLib v0.2.0
+            <a href="../index.html" class="icon icon-home"> PufferLib v0.3.0
           
 
           
@@ -131,7 +132,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">PufferLib v0.2.0</a>
+          <a href="../index.html">PufferLib v0.3.0</a>
         
       </nav>
 
@@ -395,6 +396,34 @@ info (dict): contains auxiliary diagnostic information (helpful for debugging, l
 <dd class="field-even"><p>gym.Env</p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pufferlib.registry.atari.AtariFeaturizer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pufferlib.registry.atari.</span></span><span class="sig-name descname"><span class="pre">AtariFeaturizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">teams</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">team_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.registry.atari.AtariFeaturizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="pufferlib.emulation.html#pufferlib.emulation.Postprocessor" title="pufferlib.emulation.Postprocessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Postprocessor</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pufferlib.registry.atari.AtariFeaturizer.features">
+<span class="sig-name descname"><span class="pre">features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.registry.atari.AtariFeaturizer.features" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default featurizer pads observations to max team size</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pufferlib.registry.atari.AtariFeaturizer.actions">
+<span class="sig-name descname"><span class="pre">actions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.registry.atari.AtariFeaturizer.actions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pufferlib.registry.atari.AtariFeaturizer.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">team_obs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.registry.atari.AtariFeaturizer.reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pufferlib.registry.atari.AtariFeaturizer.rewards">
+<span class="sig-name descname"><span class="pre">rewards</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">team_rewards</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">team_dones</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">team_infos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.registry.atari.AtariFeaturizer.rewards" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default reward shaper sums team rewards</p>
 </dd></dl>
 
 </dd></dl>
