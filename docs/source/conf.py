@@ -82,4 +82,4 @@ html_theme_options = {
 html_static_path = ['_static']
 
 #Readable code theme
-pygments_dark_style = "monokai"
+pygments_style = "monokai"

@@ -188,8 +188,8 @@
             
   <center>
   <video width=100% height="auto" nocontrols autoplay playsinline muted loop>
-    <source src="_static/banner.webm" type="video/webm">
-    <source src="_static/banner.mp4" type="video/mp4">
+    <source src="../_static/banner.webm" type="video/webm">
+    <source src="../_static/banner.mp4" type="video/mp4">
     Your browser does not support this video.
   </video>
 </center><p><strong>Quick links:</strong> <a class="reference external" href="https://github.com/pufferai/pufferlib">Github</a> | <a class="reference external" href="https://api.wandb.ai/links/jsuarez/wue9qkr0">Baselines</a> | <a class="reference external" href="https://discord.gg/spT4huaGYV">Discord</a> | <a class="reference external" href="https://twitter.com/jsuarez5341">Twitter</a></p>
@@ -198,6 +198,30 @@
 <div class="line-block">
 <div class="line"><a class="reference internal" href="examples.html#minimal-cleanrl-demo"><span class="std std-ref">Minimal CleanRL Demo</span></a> Neural MMO on minimally modified CleanRL. Use as an introductory reference.</div>
 <div class="line"><a class="reference internal" href="examples.html#custom-cleanrl-demo"><span class="std std-ref">Custom CleanRL Demo</span></a> Neural MMO on our customized version of CleanRL. Use as a template for your projects.</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">### Example PufferLib API usage with Neural MMO</span>
+
+<span class="kn">import</span> <span class="nn">nmmo</span>
+
+<span class="kn">import</span> <span class="nn">pufferlib</span>
+<span class="kn">import</span> <span class="nn">pufferlib.emulation</span>
+<span class="kn">import</span> <span class="nn">pufferlib.vectorization.serial</span>
+
+<span class="c1"># Wrap Neural MMO with PufferLib</span>
+<span class="n">binding</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">emulation</span><span class="o">.</span><span class="n">Binding</span><span class="p">(</span>
+        <span class="n">env_cls</span><span class="o">=</span><span class="n">nmmo</span><span class="o">.</span><span class="n">Env</span><span class="p">,</span>
+        <span class="n">env_name</span><span class="o">=</span><span class="s1">&#39;Neural MMO&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="c1"># Vectorize 4 environments across 2 cores</span>
+<span class="n">envs</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">vectorization</span><span class="o">.</span><span class="n">serial</span><span class="o">.</span><span class="n">VecEnv</span><span class="p">(</span><span class="n">binding</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">envs_per_worker</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Standard Gym API. See custom CleanRL demo for async API.</span>
+<span class="n">obs</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">32</span><span class="p">):</span>
+    <span class="n">atns</span> <span class="o">=</span> <span class="p">[</span><span class="n">binding</span><span class="o">.</span><span class="n">single_action_space</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">binding</span><span class="o">.</span><span class="n">max_agents</span><span class="p">)]</span>
+    <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">atns</span><span class="p">)</span>
+</pre></div>
 </div>
 <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h1>
