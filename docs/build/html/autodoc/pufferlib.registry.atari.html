@@ -223,10 +223,10 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../rst/landing.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../rst/landing.html#included-frameworks-and-environments">Included frameworks and environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../rst/landing.html#authorship">Authorship</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../rst/landing.html#contributing">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rst/landing.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rst/landing.html#libraries">Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rst/landing.html#environments">Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rst/landing.html#current-limitations">Current Limitations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../rst/landing.html#license">License</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Examples</span></p>
@@ -501,14 +501,14 @@ info (dict): contains auxiliary diagnostic information (helpful for debugging, l
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pufferlib.registry.atari.AtariFeaturizer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pufferlib.registry.atari.</span></span><span class="sig-name descname"><span class="pre">AtariFeaturizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.registry.atari.AtariFeaturizer" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pufferlib.registry.atari.</span></span><span class="sig-name descname"><span class="pre">AtariFeaturizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_multiagent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.registry.atari.AtariFeaturizer" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="pufferlib.emulation.html#pufferlib.emulation.Postprocessor" title="pufferlib.emulation.Postprocessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Postprocessor</span></code></a></p>
-<p>Provides full access to the underlying environment</p>
+<p>Postprocessors provide full access to the environment</p>
+<p>This means you can use them to cheat. Don’t blame us if you do.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pufferlib.registry.atari.AtariFeaturizer.features">
 <span class="sig-name descname"><span class="pre">features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.registry.atari.AtariFeaturizer.features" title="Permalink to this definition">#</a></dt>
-<dd><p>Called on each observation after it is returned by the environment</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pufferlib.registry.atari.AtariFeaturizer.infos">
@@ -516,21 +516,41 @@ info (dict): contains auxiliary diagnostic information (helpful for debugging, l
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pufferlib.registry.atari.AtariFeaturizer.actions">
-<span class="sig-name descname"><span class="pre">actions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.registry.atari.AtariFeaturizer.actions" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pufferlib.registry.atari.AtariFeaturizer.action">
+<span class="sig-name descname"><span class="pre">action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.registry.atari.AtariFeaturizer.action" title="Permalink to this definition">#</a></dt>
 <dd><p>Called on each action before it is passed to the environment</p>
+<p>Actions output by your policy do not need to match the action space,
+but they must be compatible after this function is called.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pufferlib.registry.atari.AtariFeaturizer.observation">
+<span class="sig-name descname"><span class="pre">observation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.registry.atari.AtariFeaturizer.observation" title="Permalink to this definition">#</a></dt>
+<dd><p>Called on each observation after it is returned by the environment</p>
+<p>You must override Postprocessor.observation_space if this function
+changes the structure of observations.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pufferlib.registry.atari.AtariFeaturizer.observation_space">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">observation_space</span></span><a class="headerlink" href="#pufferlib.registry.atari.AtariFeaturizer.observation_space" title="Permalink to this definition">#</a></dt>
+<dd><p>The space of observations output by the postprocessor</p>
+<p>You will have to implement this function if Postprocessor.observation
+modifies the structure of observations. Defaults to the env’s obs space.</p>
+<p>PufferLib supports heterogeneous observation spaces for multi-agent environments,
+provided that your postprocessor pads or otherwise cannonicalizes the observations.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pufferlib.registry.atari.AtariFeaturizer.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.registry.atari.AtariFeaturizer.reset" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.registry.atari.AtariFeaturizer.reset" title="Permalink to this definition">#</a></dt>
 <dd><p>Called at the beginning of each episode</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pufferlib.registry.atari.AtariFeaturizer.rewards_dones_infos">
-<span class="sig-name descname"><span class="pre">rewards_dones_infos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rewards</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dones</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">infos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.registry.atari.AtariFeaturizer.rewards_dones_infos" title="Permalink to this definition">#</a></dt>
-<dd><p>Called on each reward, done, and info after they are returned by the environment</p>
+<dt class="sig sig-object py" id="pufferlib.registry.atari.AtariFeaturizer.reward_done_info">
+<span class="sig-name descname"><span class="pre">reward_done_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reward</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">done</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.registry.atari.AtariFeaturizer.reward_done_info" title="Permalink to this definition">#</a></dt>
+<dd><p>Called on the reward, done, and info after they are returned by the environment</p>
 </dd></dl>
 
 </dd></dl>

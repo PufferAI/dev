@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Environment Registry" href="examples.html" /><link rel="prev" title="Index" href="../index.html" />
 
     <!-- Generated with Sphinx 5.0.0 and Furo 2023.03.27 -->
-        <title>Installation - PufferLib 0.3.0 documentation</title>
+        <title>User Guide - PufferLib 0.3.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
@@ -223,10 +223,10 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul class="current">
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#included-frameworks-and-environments">Included frameworks and environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#authorship">Authorship</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#contributing">Contributing</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#libraries">Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#environments">Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#current-limitations">Current Limitations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#license">License</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Examples</span></p>
@@ -283,80 +283,326 @@
           </label>
         </div>
         <article role="main">
-          <center>
+          <div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>You have an environment, a PyTorch model, and a reinforcement learning library that are designed to work together but don’t. PufferLib provides one-line wrappers that make them play nice.</p>
+<div class="sd-card sd-sphinx-override sd-w-75 sd-mt-4 sd-mb-2 sd-ml-auto sd-mr-auto sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<p class="sd-card-text"><strong>Click to Demo PufferLib in Colab</strong></p>
+</div>
+<a class="sd-stretched-link reference external" href="https://colab.research.google.com/drive/1l1qLjerLwYoLjuKNr9iVc3TZ8gW2QVnz?usp=sharing"></a></div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<center>
   <video width=100% height="auto" nocontrols autoplay playsinline muted loop>
     <source src="../_static/banner.webm" type="video/webm">
     <source src="../_static/banner.mp4" type="video/mp4">
     Your browser does not support this video.
   </video>
-</center><p><strong>Quick links:</strong> <a class="reference external" href="https://github.com/pufferai/pufferlib">Github</a> | <a class="reference external" href="https://api.wandb.ai/links/jsuarez/wue9qkr0">Baselines</a> | <a class="reference external" href="https://discord.gg/spT4huaGYV">Discord</a> | <a class="reference external" href="https://twitter.com/jsuarez5341">Twitter</a></p>
-<p>You have an environment, a PyTorch model, and a reinforcement learning framework that are designed to work together but don’t. PufferLib is a wrapper layer that makes RL on complex game environments as simple as RL on Atari. You write a native PyTorch network and a short binding for your environment; PufferLib takes care of the rest.</p>
-<p>Join our community <a class="reference external" href="https://discord.gg/spT4huaGYV">Discord</a> to get support or if you are interested in contributing to the project.</p>
-<div class="line-block">
-<div class="line"><a class="reference internal" href="examples.html#minimal-cleanrl-demo"><span class="std std-ref">Minimal CleanRL Demo</span></a> Neural MMO on minimally modified CleanRL. Use as an introductory reference.</div>
-<div class="line"><a class="reference internal" href="examples.html#custom-cleanrl-demo"><span class="std std-ref">Custom CleanRL Demo</span></a> Neural MMO on our customized version of CleanRL. Use as a template for your projects.</div>
+</center><div style="text-align: center;">
+    <a class="github-button" href="https://github.com/pufferai/pufferlib" data-color-scheme="no-preference: dark; light: light; dark: dark;" data-show-count="true" aria-label="Star pufferai/pufferlib on GitHub" style="margin-right: 20px;">Star</a>
+    <a href="https://discord.gg/puffer" target="_blank" style="margin-right: 20px;">
+        <img src="https://dcbadge.vercel.app/api/server/puffer?style=plastic" alt="Discord">
+    </a>
+    <a href="https://twitter.com/jsuarez5341" target="_blank">
+        <img src="https://img.shields.io/twitter/url/https/twitter.com/cloudposse.svg?style=social&label=Follow%20%40jsuarez5341" alt="Twitter">
+    </a>
+</div><div class="line-block">
+<div class="line"><br /></div>
 </div>
-<section id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h1>
-<p><strong>Docker Setup:</strong> <a class="reference external" href="https://github.com/pufferai/puffertank">PufferTank</a> ships with PufferLib and all test environments. Includes a GPU-enabled VSCode Dev Container config file for easy local development. We highly recommend this setup for PufferLib contributors.</p>
-<p><strong>Pip Install:</strong> Requires PyTorch (we tested on 1.12.0+cu116). Does not include non-pip environment dependencies.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pufferlib</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">pufferlib</span><span class="p">[</span><span class="n">rllib</span><span class="p">]</span> <span class="c1"># Compatible Ray/RLlib versions</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">pufferlib</span><span class="p">[</span><span class="n">docs</span><span class="p">]</span> <span class="c1"># Build docs locally</span>
-
-<span class="n">pip</span> <span class="n">install</span> <span class="n">pufferlib</span><span class="p">[</span><span class="n">tests</span><span class="p">]</span> <span class="c1"># All test environments</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">pufferlib</span><span class="p">[</span><span class="n">atari</span><span class="p">,</span><span class="n">box2d</span><span class="p">,</span><span class="n">butterfly</span><span class="p">,</span><span class="n">magent</span><span class="p">,</span><span class="n">microrts</span><span class="p">,</span><span class="n">nethack</span><span class="p">,</span><span class="n">nmmo</span><span class="p">]</span> <span class="c1"># Individual environments</span>
-</pre></div>
-</div>
-</section>
-<section id="included-frameworks-and-environments">
-<h1>Included frameworks and environments<a class="headerlink" href="#included-frameworks-and-environments" title="Permalink to this heading">#</a></h1>
-<p>Frameworks are supported by a 50-150 line wrapper that formats a native PyTorch policy for compatibility with the given model API. We currently support the following frameworks:</p>
-<div class="line-block">
-<div class="line"><a class="reference external" href="https://github.com/vwxyzjn/cleanrl">CleanRL</a> - Simple single-file PPO implementation suited for 80% of academic research</div>
-<div class="line"><a class="reference external" href="https://docs.ray.io/en/latest/rllib/index.html">RLLib</a> - Industry-grade reinforcement learning library with more features and corresponding overhead</div>
-</div>
-<p>Environments are supported by a 1-line call that wraps the provided class or environment creator in a PufferEnv. PufferLib is compatible with both <a class="reference external" href="https://github.com/openai/gym">Gym</a> and <a class="reference external" href="https://pettingzoo.farama.org">PettingZoo</a> environments and includes bindings for the following projects:</p>
-<div class="line-block">
-<div class="line"><a class="reference external" href="https://github.com/mgbellemare/Arcade-Learning-Environment">Atari (ALE)</a> - Beam Rider, Breakout, Enduro, Pong, Qbert, Seaquest, Space Invaders. Includes option to test against all ALE environments.</div>
-<div class="line"><a class="reference external" href="https://www.gymlibrary.dev/environments/box2d/">Box2D (Gym)</a> - Cart Pole</div>
-<div class="line"><a class="reference external" href="https://pettingzoo.farama.org/environments/butterfly/">Butterfly (PettingZoo)</a> - Knights Archers Zombies, Cooperative Pong</div>
-<div class="line"><a class="reference external" href="https://github.com/Bam4d/Griddly">Griddly</a> - Spiders</div>
-<div class="line"><a class="reference external" href="https://github.com/geek-ai/MAgent">MAgent</a> - Default configuration</div>
-<div class="line"><a class="reference external" href="https://github.com/Farama-Foundation/MicroRTS-Py">Gym MicroRTS</a> - Default configuration</div>
-<div class="line"><a class="reference external" href="https://github.com/facebookresearch/nle">Nethack (NLE)</a></div>
-<div class="line"><a class="reference external" href="https://neuralmmo.github.io">Neural MMO</a> - Default configuration</div>
-</div>
-</section>
-<section id="authorship">
-<h1>Authorship<a class="headerlink" href="#authorship" title="Permalink to this heading">#</a></h1>
-<div class="line-block">
-<div class="line"><a class="reference external" href="https://people.csail.mit.edu/jsuarez">Joseph Suarez:</a> Creator of PufferLib. If you are using PufferLib in conjunction with <a class="reference external" href="https://neuralmmo.github.io">Neural MMO</a>, note that I run both projects and would be happy to help get you set up.</div>
-</div>
-</section>
-<section id="contributing">
-<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this heading">#</a></h1>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
 <summary class="sd-summary-title sd-card-header">
-List of Contributors<div class="sd-summary-down docutils">
+Installation<div class="sd-summary-down docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-down" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 8.72a.75.75 0 000 1.06l6.25 6.25a.75.75 0 001.06 0l6.25-6.25a.75.75 0 00-1.06-1.06L12 14.44 6.28 8.72a.75.75 0 00-1.06 0z"></path></svg></div>
+<div class="sd-summary-up docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-up" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M18.78 15.28a.75.75 0 000-1.06l-6.25-6.25a.75.75 0 00-1.06 0l-6.25 6.25a.75.75 0 101.06 1.06L12 9.56l5.72 5.72a.75.75 0 001.06 0z"></path></svg></div>
+</summary><div class="sd-summary-content sd-card-body docutils">
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
+</input><label class="sd-tab-label" for="sd-tab-item-0">
+PufferTank</label><div class="sd-tab-content docutils">
+<p class="sd-card-text"><a class="reference external" href="https://github.com/pufferai/puffertank">PufferTank</a> is a GPU container with PufferLib and dependencies for all environments in the registry, including some that are slow and tricky to install.</p>
+<p class="sd-card-text">If you are new to containers, clone the repository and open it in VSCode. You will need to install the Dev Container plugin as well as Docker Desktop. VSCode will then detect the settings in .devcontainer and set up the container for you.</p>
+</div>
+<input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
+</input><label class="sd-tab-label" for="sd-tab-item-1">
+Pip</label><div class="sd-tab-content docutils">
+<p class="sd-card-text">PufferLib is also available as a standard pip package.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pufferlib</span>
+</pre></div>
+</div>
+<p class="sd-card-text">To install additional environments and frameworks:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pufferlib</span><span class="p">[</span><span class="n">nmmo</span><span class="p">,</span><span class="n">cleanrl</span><span class="p">]</span>
+</pre></div>
+</div>
+<p class="sd-card-text">Note that some environments require additional non-pip dependencies. Follow the additional setup from the maintainers of that environment, or just use PufferTank.</p>
+</div>
+</div>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+Contributors<div class="sd-summary-down docutils">
 <svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-down" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 8.72a.75.75 0 000 1.06l6.25 6.25a.75.75 0 001.06 0l6.25-6.25a.75.75 0 00-1.06-1.06L12 14.44 6.28 8.72a.75.75 0 00-1.06 0z"></path></svg></div>
 <div class="sd-summary-up docutils">
 <svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-up" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M18.78 15.28a.75.75 0 000-1.06l-6.25-6.25a.75.75 0 00-1.06 0l-6.25 6.25a.75.75 0 101.06 1.06L12 9.56l5.72 5.72a.75.75 0 001.06 0z"></path></svg></div>
 </summary><div class="sd-summary-content sd-card-body docutils">
 <p class="sd-card-text"><strong>Joseph Suarez</strong>: Creator and developer of PufferLib</p>
+<p class="sd-card-text"><strong>David Bloomin</strong>: Policy pool/store/selector</p>
 <p class="sd-card-text"><strong>Nick Jenkins</strong>: Layout for the system architecture diagram. Adversary.design.</p>
 <p class="sd-card-text"><strong>Andranik Tigranyan</strong>: Streamline and animate the pufferfish. Hire him on UpWork if you like what you see here.</p>
 <p class="sd-card-text"><strong>Sara Earle</strong>: Original pufferfish model. Hire her on UpWork if you like what you see here.</p>
 </div>
-</details><p>We welcome contributions from the community. Please communicate with us on <a class="reference external" href="https://discord.gg/spT4huaGYV">Discord</a> before opening an issue or pull request on Github. We are particularly interested in contributions to the following areas:</p>
-<div class="line-block">
-<div class="line"><strong>Framework bindings:</strong> We currently support CleanRL and RLLib. We would like to add bindings for other frameworks such as Stable Baselines and Tianshou.</div>
-<div class="line"><strong>Environment bindings:</strong> We would like to improve our test coverage by adding bindings for additional environments. This also requires specifying any external dependencies in PufferTank.</div>
-<div class="line"><strong>Testing:</strong> PufferLib is a stability-crucial library. We would like to add better coverage to our test suite.</div>
-<div class="line"><strong>Performance:</strong> We would like to improve the performance of our vectorized environments. Our current implementation is a bottleneck for many projects.</div>
-<div class="line"><strong>Baselines:</strong> We would like to add more rigerous performance and regression evaluations to out test suite.</div>
-<div class="line"><strong>Documentation:</strong> We would like to improve our documentation and examples.</div>
+</details><section id="user-guide">
+<h1>User Guide<a class="headerlink" href="#user-guide" title="Permalink to this heading">#</a></h1>
+<p><strong>You can open this guide in a Colab notebook by clicking the demo button at the top of this page</strong></p>
+<p>Complex environments may have heirarchical observations and actions, variable numbers of agents, and other quirks that make them difficult to work with and incompatible with standard reinforcement learning libraries. PufferLib’s emulation layer makes every environment look like it has flat observations and actions and a constant number of agents, with no changes to the underlying environment. Here’s how it works with two notoriously complex environments, NetHack and Neural MMO:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pufferlib.emulation</span>
+<span class="kn">import</span> <span class="nn">nle</span>
+<span class="kn">import</span> <span class="nn">nmmo</span>
+
+<span class="n">nethack</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">emulation</span><span class="o">.</span><span class="n">GymPufferEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="o">=</span><span class="n">nle</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">NLE</span><span class="p">)</span>
+<span class="n">neural_mmo</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">emulation</span><span class="o">.</span><span class="n">PettingZooPufferEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="o">=</span><span class="n">nle</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">NLE</span><span class="p">)</span>
+</pre></div>
 </div>
+<p>You can pass envs by class, creator function, or object, with or without additional arguments. These wrappers enable us to make some optimizations to vectorization code that would be difficult to implement otherwise. You can choose from a variety of vectorization backends. They all share the same interface with synchronous and asynchronous options:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pufferlib.vectorization</span>
+
+<span class="n">env_creator</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">emulation</span><span class="o">.</span><span class="n">GymPufferEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="o">=</span><span class="n">nmmo</span><span class="o">.</span><span class="n">Env</span><span class="p">)</span>
+
+<span class="n">envs</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">vectorization</span><span class="o">.</span><span class="n">Serial</span><span class="p">(</span>
+    <span class="n">env_creator</span><span class="p">,</span> <span class="n">num_envs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">envs</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">vectorization</span><span class="o">.</span><span class="n">Multiprocessing</span><span class="p">(</span>
+    <span class="n">env_creator</span><span class="p">,</span> <span class="n">num_envs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">envs</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">vectorization</span><span class="o">.</span><span class="n">Multiprocessing</span><span class="p">(</span>
+    <span class="n">env_creator</span><span class="p">,</span> <span class="n">num_envs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Synchronous vectorization</span>
+<span class="n">obs</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">obs</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">dones</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+
+<span class="c1"># Asynchronous vectorization</span>
+<span class="n">envs</span><span class="o">.</span><span class="n">async_reset</span><span class="p">()</span>
+<span class="n">obs</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">dones</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+<span class="n">envs</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We suggest Serial for debugging and Multiprocessing for most training runs. Ray is a good option if you need to scale beyond a single machine.</p>
+<p>PufferLib allows you to write vanilla PyTorch policies and use them with multiple learning libraries. We take care of the details of converting between the different APIs. Here’s a policy that will work with <em>any</em> environment, with a one-line wrapper for CleanRL:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+
+<span class="kn">import</span> <span class="nn">pufferlib.frameworks.cleanrl</span>
+
+
+<span class="k">class</span> <span class="nc">Default</span><span class="p">(</span><span class="n">Policy</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">envs</span><span class="p">,</span> <span class="n">input_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">envs</span><span class="o">.</span><span class="n">single_observation_space</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">hidden_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decoders</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">([</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">envs</span><span class="o">.</span><span class="n">single_action_space</span><span class="o">.</span><span class="n">nvec</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_head</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env_outputs</span><span class="p">):</span>
+        <span class="n">env_outputs</span> <span class="o">=</span> <span class="n">env_outputs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">env_outputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">hidden</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">env_outputs</span><span class="p">)</span>
+        <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span><span class="n">dec</span><span class="p">(</span><span class="n">hidden</span><span class="p">)</span> <span class="k">for</span> <span class="n">dec</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoders</span><span class="p">]</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_head</span><span class="p">(</span><span class="n">hidden</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">actions</span><span class="p">,</span> <span class="n">value</span>
+
+<span class="n">CleanRLPolicy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">frameworks</span><span class="o">.</span><span class="n">cleanrl</span><span class="o">.</span><span class="n">CleanRL</span><span class="p">(</span><span class="n">Default</span><span class="p">(</span><span class="n">envs</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>There’s also a lightweight, fully optional base policy class for PufferLib. It breaks the forward pass into two functions, encode_observations and decode_actions. The advantage of this is that it lets us handle recurrance for you, since every framework does this a bit differently. Our actual default policy is implemented this way, so we’ll use it as an example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+
+<span class="kn">import</span> <span class="nn">pufferlib.frameworks.cleanrl</span>
+<span class="kn">import</span> <span class="nn">pufferlib.models</span>
+
+<span class="n">policy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Default</span><span class="p">(</span><span class="n">envs</span><span class="p">)</span>
+<span class="n">CleanRLPolicy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">frameworks</span><span class="o">.</span><span class="n">cleanrl</span><span class="o">.</span><span class="n">CleanRL</span><span class="p">(</span><span class="n">policy</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>So far, the code above is fully general and does not rely on PufferLib support for specific environments. For convenience, we also provide a registry of environments and models. Here’s a complete example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">nle</span>
+
+<span class="kn">import</span> <span class="nn">pufferlib.emulation</span>
+<span class="kn">import</span> <span class="nn">pufferlib.vectorization</span>
+<span class="kn">import</span> <span class="nn">pufferlib.frameworks.cleanrl</span>
+<span class="kn">import</span> <span class="nn">pufferlib.models</span>
+
+<span class="kn">import</span> <span class="nn">pufferlib.registry.nethack</span>
+
+
+<span class="n">make_env</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">nethack</span><span class="o">.</span><span class="n">make_env</span>
+<span class="n">envs</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">vectorization</span><span class="o">.</span><span class="n">Serial</span><span class="p">(</span>
+    <span class="n">env_creator</span><span class="o">=</span><span class="n">make_env</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">envs_per_worker</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">policy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">nethack</span><span class="o">.</span><span class="n">Policy</span><span class="p">(</span><span class="n">envs</span><span class="p">)</span>
+<span class="n">policy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Recurrent</span><span class="p">(</span><span class="n">policy</span><span class="p">)</span>
+<span class="n">policy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">frameworks</span><span class="o">.</span><span class="n">cleanrl</span><span class="o">.</span><span class="n">Policy</span><span class="p">(</span><span class="n">policy</span><span class="p">)</span>
+
+<span class="c1"># Standard environment loop</span>
+<span class="n">obs</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">32</span><span class="p">):</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="n">policy</span><span class="o">.</span><span class="n">get_action_and_value</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">obs</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+    <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It’s that simple – almost. One small quirk is that, because PufferLib flattens observations, you have to unflatten them in the network forward pass:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">env_outputs</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">emulation</span><span class="o">.</span><span class="n">unpack_batched_obs</span><span class="p">(</span>
+    <span class="n">env_outputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">envs</span><span class="o">.</span><span class="n">flat_observation_space</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Save a reference to your vectorized environments in the policy init method so you can access the flat observation space needed for this call.</p>
+</section>
+<section id="libraries">
+<h1>Libraries<a class="headerlink" href="#libraries" title="Permalink to this heading">#</a></h1>
+<p>PufferLib’s emulation layer adheres to the Gym and PettingZoo APIs: you can use it with <em>any</em> environment and learning library (subject to Limitations). The libraries and environments below are just the ones we’ve tested. We also provide additional tools to make them easier to work with.</p>
+<p>PufferLib provides <em>pufferlib.frameworks</em> for the the learning libraries below. These are short wrappers over your vanilla PyTorch policy that handles learning library API details for you. Additionally, if you use our <em>optional</em> model API, which just requires you to split your <em>forward</em> function into an <em>encode</em> and <em>decode</em> portion, we can handle recurrance for you. This is the approach we use in our default policies.</p>
+<div style="display: flex; align-items: center; margin-bottom: 15px;">
+    <div style="flex-shrink: 0; width: 100px; margin-right: 20px;">
+        <a href="https://github.com/vwxyzjn/cleanrl" target="_blank">
+            <img src="https://img.shields.io/github/stars/vwxyzjn/cleanrl?labelColor=999999&color=66dcdc&cacheSeconds=100000" alt="Star CleanRL" width="100px">
+        </a>
+    </div>
+    <div>
+        <p><a href="https://github.com/vwxyzjn/cleanrl">CleanRL</a> provides single-file RL implementations suited for 80+% of academic research. It was designed for simple environments like Atari, but with PufferLib, you can use it with just about anything.</p>
+    </div>
+</div><p><span class="xref std std-ref">Minimal CleanRL Demo:</span> Shows how to integrate PufferLib with minimal code changes. Most users should start here.</p>
+<p><span class="xref std std-ref">CleanPuffeRL Demo:</span> Uses our heavily customized version of CleanRL PPO with optimizations for variable agent populations, self-play, and experiment management. Proudly supporting the NeurIPS 2023 Neural MMO Competition.</p>
+<div style="display: flex; align-items: center; margin-bottom: 15px;">
+    <div style="flex-shrink: 0; width: 100px; margin-right: 20px;">
+        <a href="https://github.com/anyscale/ray" target="_blank">
+            <img src="https://img.shields.io/github/stars/ray-project/ray?labelColor=999999&color=66dcdc&cacheSeconds=100000" alt="Star Ray" width="100px">
+        </a>
+    </div>
+    <div>
+        <p><a href="https://docs.ray.io/">Ray</a> is a general purpose distributed computing framework that includes <a href="https://docs.ray.io/en/latest/rllib">RLlib</a>, an industry reinforcement learning library.</p>
+    </div>
+</div><p><span class="xref std std-ref">RLlib Demo:</span> Shows how to integrate PufferLib RLlib.</p>
+</section>
+<section id="environments">
+<h1>Environments<a class="headerlink" href="#environments" title="Permalink to this heading">#</a></h1>
+<p>We also provide a registry of environments and models that are supported out of the box. These environments are already set up for you in PufferTank and are used in our test cases to ensure they work with PufferLib. Several also include reasonable baseline policies. Join our Discord if you would like to add setup and tests for new environments or improvements to any of the baselines.</p>
+<div style="display: flex; align-items: center; margin-bottom: 15px;">
+    <div style="flex-shrink: 0; width: 100px; margin-right: 20px;">
+        <a href="https://github.com/openai/gym" target="_blank">
+            <img src="https://img.shields.io/github/stars/openai/gym?labelColor=999999&color=66dcdc&cacheSeconds=100000" alt="Star OpenAI Gym" width="100px">
+        </a>
+    </div>
+    <div>
+        <p><a href="https://github.com/openai/gym">OpenAI Gym</a> is the standard API for single-agent reinforcement learning environments. It also contains some built-in environments. We include <a href="https://www.gymlibrary.dev/environments/box2d/">Box2D</a> in our registry.</p>
+    </div>
+</div>
+
+<div style="display: flex; align-items: center; margin-bottom: 15px;">
+    <div style="flex-shrink: 0; width: 100px; margin-right: 20px;">
+        <a href="https://github.com/Farama-Foundation/Arcade-Learning-Environment" target="_blank">
+            <img src="https://img.shields.io/github/stars/Farama-Foundation/Arcade-Learning-Environment?labelColor=999999&color=66dcdc&cacheSeconds=100000" alt="Star Arcade Learning Environment" width="100px">
+        </a>
+    </div>
+    <div>
+        <p><a href="https://github.com/Farama-Foundation/Arcade-Learning-Environment">Arcade Learning Environment</a> provides a Gym interface for classic Atari games. This is the most popular benchmark for reinforcement learning algorithms.</p>
+    </div>
+</div>
+
+<div style="display: flex; align-items: center; margin-bottom: 15px;">
+    <div style="flex-shrink: 0; width: 100px; margin-right: 20px;">
+        <a href="https://github.com/Farama-Foundation/PettingZoo" target="_blank">
+            <img src="https://img.shields.io/github/stars/Farama-Foundation/PettingZoo?labelColor=999999&color=66dcdc&cacheSeconds=100000" alt="Star PettingZoo" width="100px">
+        </a>
+    </div>
+    <div>
+        <p><a href="https://pettingzoo.farama.org">PettingZoo</a> is the standard API for multi-agent reinforcement learning environments. It also contains some built-in environments. We include <a href="https://pettingzoo.farama.org/environments/butterfly/">Butterfly</a> in our registry.</p>
+    </div>
+</div>
+
+<div style="display: flex; align-items: center; margin-bottom: 15px;">
+    <div style="flex-shrink: 0; width: 100px; margin-right: 20px;">
+        <a href="https://github.com/neuralmmo/environment" target="_blank">
+            <img src="https://img.shields.io/github/stars/openai/neural-mmo?labelColor=999999&color=66dcdc&cacheSeconds=100000" alt="Star Neural MMO" width="100px">
+        </a>
+    </div>
+    <div>
+        <p><a href="https://neuralmmo.github.io">Neural MMO</a> is a massively multiagent environment for reinforcement learning. It combines large agent populations with high per-agent complexity and is the most actively maintained (by me) project on this list.</p>
+    </div>
+</div>
+
+<div style="display: flex; align-items: center; margin-bottom: 15px;">
+    <div style="flex-shrink: 0; width: 100px; margin-right: 20px;">
+        <a href="https://github.com/geek-ai/MAgent" target="_blank">
+            <img src="https://img.shields.io/github/stars/geek-ai/MAgent?labelColor=999999&color=66dcdc&cacheSeconds=100000" alt="Star MAgent" width="100px">
+        </a>
+    </div>
+    <div>
+        <p><a href="https://github.com/geek-ai/MAgent/blob/master/doc/get_started.md">MAgent</a> is a platform for large-scale agent simulation.</p>
+    </div>
+</div>
+
+<div style="display: flex; align-items: center; margin-bottom: 15px;">
+    <div style="flex-shrink: 0; width: 100px; margin-right: 20px;">
+        <a href="https://github.com/openai/procgen" target="_blank">
+            <img src="https://img.shields.io/github/stars/openai/procgen?labelColor=999999&color=66dcdc&cacheSeconds=100000" alt="Star Procgen" width="100px">
+        </a>
+    </div>
+    <div>
+        <p><a href="https://github.com/openai/procgen">Procgen</a> is a suite of arcade games for reinforcement learning with procedurally generated levels. It is one of the most computationally efficient environments on this list.</p>
+    </div>
+</div>
+
+<div style="display: flex; align-items: center; margin-bottom: 15px;">
+    <div style="flex-shrink: 0; width: 100px; margin-right: 20px;">
+        <a href="https://github.com/facebookresearch/nle" target="_blank">
+            <img src="https://img.shields.io/github/stars/facebookresearch/nle?labelColor=999999&color=66dcdc&cacheSeconds=100000" alt="Star NLE" width="100px">
+        </a>
+    </div>
+    <div>
+        <p><a href="https://github.com/facebookresearch/nle">Nethack Learning Environment</a> is a port of the classic game NetHack to the Gym API. It combines extreme complexity with high simulation efficiency.</p>
+    </div>
+</div>
+
+<div style="display: flex; align-items: center; margin-bottom: 15px;">
+    <div style="flex-shrink: 0; width: 100px; margin-right: 20px;">
+        <a href="https://github.com/danijar/crafter" target="_blank">
+            <img src="https://img.shields.io/github/stars/danijar/crafter?labelColor=999999&color=66dcdc&cacheSeconds=100000" alt="Star Crafter" width="100px">
+        </a>
+    </div>
+    <div>
+        <p><a href="https://github.com/danijar/crafter">Crafter</a> is a top-down 2D Minecraft clone for RL research. It provides pixel observations and relatively long time horizons.</p>
+    </div>
+</div>
+
+<div style="display: flex; align-items: center; margin-bottom: 15px;">
+    <div style="flex-shrink: 0; width: 100px; margin-right: 20px;">
+        <a href="https://github.com/Bam4d/Griddly" target="_blank">
+            <img src="https://img.shields.io/github/stars/Bam4d/Griddly?labelColor=999999&color=66dcdc&cacheSeconds=100000" alt="Star Griddly" width="100px">
+        </a>
+    </div>
+    <div>
+        <p><a href="https://griddly.readthedocs.io/en/latest/">Griddly</a> is an extremely optimized platform for building reinforcement learning environments. It also includes a large suite of built-in environments.</p>
+    </div>
+</div>
+
+<div style="display: flex; align-items: center; margin-bottom: 15px;">
+    <div style="flex-shrink: 0; width: 100px; margin-right: 20px;">
+        <a href="https://github.com/Farama-Foundation/MicroRTS-Py" target="_blank">
+            <img src="https://img.shields.io/github/stars/Farama-Foundation/MicroRTS-Py?labelColor=999999&color=66dcdc&cacheSeconds=100000" alt="Star MicroRTS-Py" width="100px">
+        </a>
+    </div>
+    <div>
+        <p><a href="https://github.com/Farama-Foundation/MicroRTS-Py">Gym MicroRTS</a> is a real time strategy engine for reinforcement learning research. The Java configuration is a bit finicky -- we're still debugging this.</p>
+    </div>
+</div></section>
+<section id="current-limitations">
+<h1>Current Limitations<a class="headerlink" href="#current-limitations" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>No continuous action spaces (WIP)</p></li>
+<li><p>Pre-gymnasium Gym and PettingZoo only (WIP)</p></li>
+<li><p>Support for heterogenous observations and actions requires you to specify teams such that each team has the same observation and action space. There’s no good way around this.</p></li>
+</ul>
 </section>
 <section id="license">
 <h1>License<a class="headerlink" href="#license" title="Permalink to this heading">#</a></h1>

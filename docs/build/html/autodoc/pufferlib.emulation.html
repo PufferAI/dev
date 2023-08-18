@@ -223,10 +223,10 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../rst/landing.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../rst/landing.html#included-frameworks-and-environments">Included frameworks and environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../rst/landing.html#authorship">Authorship</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../rst/landing.html#contributing">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rst/landing.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rst/landing.html#libraries">Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rst/landing.html#environments">Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rst/landing.html#current-limitations">Current Limitations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../rst/landing.html#license">License</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Examples</span></p>
@@ -287,45 +287,61 @@
 <span id="pufferlib-emulation-module"></span><h1>pufferlib.emulation module<a class="headerlink" href="#module-pufferlib.emulation" title="Permalink to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pufferlib.emulation.Postprocessor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pufferlib.emulation.</span></span><span class="sig-name descname"><span class="pre">Postprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.Postprocessor" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pufferlib.emulation.</span></span><span class="sig-name descname"><span class="pre">Postprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_multiagent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.Postprocessor" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Base class for user-defined featurizers and postprocessors</p>
-<p>Instantiated per agent or team</p>
-<p>Provides full access to the underlying environment</p>
+<p>Modify data before it is returned from or passed to the environment</p>
+<p>For multi-agent environments, each agent has its own stateful postprocessor.</p>
+<p>Postprocessors provide full access to the environment</p>
+<p>This means you can use them to cheat. Don’t blame us if you do.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="pufferlib.emulation.Postprocessor.observation_space">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">observation_space</span></span><a class="headerlink" href="#pufferlib.emulation.Postprocessor.observation_space" title="Permalink to this definition">#</a></dt>
+<dd><p>The space of observations output by the postprocessor</p>
+<p>You will have to implement this function if Postprocessor.observation
+modifies the structure of observations. Defaults to the env’s obs space.</p>
+<p>PufferLib supports heterogeneous observation spaces for multi-agent environments,
+provided that your postprocessor pads or otherwise cannonicalizes the observations.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="pufferlib.emulation.Postprocessor.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.Postprocessor.reset" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.Postprocessor.reset" title="Permalink to this definition">#</a></dt>
 <dd><p>Called at the beginning of each episode</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pufferlib.emulation.Postprocessor.features">
-<span class="sig-name descname"><span class="pre">features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.Postprocessor.features" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pufferlib.emulation.Postprocessor.observation">
+<span class="sig-name descname"><span class="pre">observation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.Postprocessor.observation" title="Permalink to this definition">#</a></dt>
 <dd><p>Called on each observation after it is returned by the environment</p>
+<p>You must override Postprocessor.observation_space if this function
+changes the structure of observations.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pufferlib.emulation.Postprocessor.actions">
-<span class="sig-name descname"><span class="pre">actions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.Postprocessor.actions" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pufferlib.emulation.Postprocessor.action">
+<span class="sig-name descname"><span class="pre">action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.Postprocessor.action" title="Permalink to this definition">#</a></dt>
 <dd><p>Called on each action before it is passed to the environment</p>
+<p>Actions output by your policy do not need to match the action space,
+but they must be compatible after this function is called.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pufferlib.emulation.Postprocessor.rewards_dones_infos">
-<span class="sig-name descname"><span class="pre">rewards_dones_infos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rewards</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dones</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">infos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.Postprocessor.rewards_dones_infos" title="Permalink to this definition">#</a></dt>
-<dd><p>Called on each reward, done, and info after they are returned by the environment</p>
+<dt class="sig sig-object py" id="pufferlib.emulation.Postprocessor.reward_done_info">
+<span class="sig-name descname"><span class="pre">reward_done_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reward</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">done</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.Postprocessor.reward_done_info" title="Permalink to this definition">#</a></dt>
+<dd><p>Called on the reward, done, and info after they are returned by the environment</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pufferlib.emulation.BasicPostprocessor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pufferlib.emulation.</span></span><span class="sig-name descname"><span class="pre">BasicPostprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.BasicPostprocessor" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pufferlib.emulation.</span></span><span class="sig-name descname"><span class="pre">BasicPostprocessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_multiagent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.BasicPostprocessor" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#pufferlib.emulation.Postprocessor" title="pufferlib.emulation.Postprocessor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Postprocessor</span></code></a></p>
 <p>Basic postprocessor that injects returns and lengths information into infos and
 provides an option to pad to a maximum episode length. Works for single-agent and
 team-based multi-agent environments</p>
-<p>Provides full access to the underlying environment</p>
+<p>Postprocessors provide full access to the environment</p>
+<p>This means you can use them to cheat. Don’t blame us if you do.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pufferlib.emulation.BasicPostprocessor.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.BasicPostprocessor.reset" title="Permalink to this definition">#</a></dt>
@@ -335,19 +351,38 @@ team-based multi-agent environments</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pufferlib.emulation.BasicPostprocessor.rewards_dones_infos">
 <span class="sig-name descname"><span class="pre">rewards_dones_infos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rewards</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dones</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">infos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.BasicPostprocessor.rewards_dones_infos" title="Permalink to this definition">#</a></dt>
-<dd><p>Called on each reward, done, and info after they are returned by the environment</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pufferlib.emulation.BasicPostprocessor.actions">
-<span class="sig-name descname"><span class="pre">actions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.BasicPostprocessor.actions" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pufferlib.emulation.BasicPostprocessor.action">
+<span class="sig-name descname"><span class="pre">action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.BasicPostprocessor.action" title="Permalink to this definition">#</a></dt>
 <dd><p>Called on each action before it is passed to the environment</p>
+<p>Actions output by your policy do not need to match the action space,
+but they must be compatible after this function is called.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pufferlib.emulation.BasicPostprocessor.features">
-<span class="sig-name descname"><span class="pre">features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.BasicPostprocessor.features" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pufferlib.emulation.BasicPostprocessor.observation">
+<span class="sig-name descname"><span class="pre">observation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.BasicPostprocessor.observation" title="Permalink to this definition">#</a></dt>
 <dd><p>Called on each observation after it is returned by the environment</p>
+<p>You must override Postprocessor.observation_space if this function
+changes the structure of observations.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pufferlib.emulation.BasicPostprocessor.observation_space">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">observation_space</span></span><a class="headerlink" href="#pufferlib.emulation.BasicPostprocessor.observation_space" title="Permalink to this definition">#</a></dt>
+<dd><p>The space of observations output by the postprocessor</p>
+<p>You will have to implement this function if Postprocessor.observation
+modifies the structure of observations. Defaults to the env’s obs space.</p>
+<p>PufferLib supports heterogeneous observation spaces for multi-agent environments,
+provided that your postprocessor pads or otherwise cannonicalizes the observations.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pufferlib.emulation.BasicPostprocessor.reward_done_info">
+<span class="sig-name descname"><span class="pre">reward_done_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reward</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">done</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.BasicPostprocessor.reward_done_info" title="Permalink to this definition">#</a></dt>
+<dd><p>Called on the reward, done, and info after they are returned by the environment</p>
 </dd></dl>
 
 </dd></dl>
@@ -457,7 +492,7 @@ team-based multi-agent environments</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pufferlib.emulation.postprocess_and_flatten">
-<span class="sig-prename descclassname"><span class="pre">pufferlib.emulation.</span></span><span class="sig-name descname"><span class="pre">postprocess_and_flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ob</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postprocessor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flat_observation_space</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reward</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">done</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_horizon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.postprocess_and_flatten" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pufferlib.emulation.</span></span><span class="sig-name descname"><span class="pre">postprocess_and_flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ob</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postprocessor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reward</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">done</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_horizon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.postprocess_and_flatten" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -467,7 +502,7 @@ team-based multi-agent environments</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pufferlib.emulation.make_flat_and_box_obs_space">
-<span class="sig-prename descclassname"><span class="pre">pufferlib.emulation.</span></span><span class="sig-name descname"><span class="pre">make_flat_and_box_obs_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_space</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.make_flat_and_box_obs_space" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pufferlib.emulation.</span></span><span class="sig-name descname"><span class="pre">make_flat_and_box_obs_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_space</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.make_flat_and_box_obs_space" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -501,13 +536,33 @@ team-based multi-agent environments</p>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="pufferlib.emulation.unpack_actions">
-<span class="sig-prename descclassname"><span class="pre">pufferlib.emulation.</span></span><span class="sig-name descname"><span class="pre">unpack_actions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flat_space</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.unpack_actions" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="pufferlib.emulation.flatten_space">
+<span class="sig-prename descclassname"><span class="pre">pufferlib.emulation.</span></span><span class="sig-name descname"><span class="pre">flatten_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">space</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.flatten_space" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pufferlib.emulation.python_flatten">
+<span class="sig-prename descclassname"><span class="pre">pufferlib.emulation.</span></span><span class="sig-name descname"><span class="pre">python_flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.python_flatten" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pufferlib.emulation.python_unflatten">
+<span class="sig-prename descclassname"><span class="pre">pufferlib.emulation.</span></span><span class="sig-name descname"><span class="pre">python_unflatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flat_sample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.python_unflatten" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pufferlib.emulation.concatenate">
+<span class="sig-prename descclassname"><span class="pre">pufferlib.emulation.</span></span><span class="sig-name descname"><span class="pre">concatenate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flat_sample</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.concatenate" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pufferlib.emulation.split">
+<span class="sig-prename descclassname"><span class="pre">pufferlib.emulation.</span></span><span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stacked_sample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flat_space</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batched</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.split" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pufferlib.emulation.unpack_batched_obs">
-<span class="sig-prename descclassname"><span class="pre">pufferlib.emulation.</span></span><span class="sig-name descname"><span class="pre">unpack_batched_obs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flat_space</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">packed_obs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.unpack_batched_obs" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pufferlib.emulation.</span></span><span class="sig-name descname"><span class="pre">unpack_batched_obs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batched_obs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flat_space</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.unpack_batched_obs" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -518,16 +573,6 @@ team-based multi-agent environments</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pufferlib.emulation.make_space_like">
 <span class="sig-prename descclassname"><span class="pre">pufferlib.emulation.</span></span><span class="sig-name descname"><span class="pre">make_space_like</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ob</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.make_space_like" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pufferlib.emulation.flatten_space">
-<span class="sig-prename descclassname"><span class="pre">pufferlib.emulation.</span></span><span class="sig-name descname"><span class="pre">flatten_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">space</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.flatten_space" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pufferlib.emulation.flatten_to_array">
-<span class="sig-prename descclassname"><span class="pre">pufferlib.emulation.</span></span><span class="sig-name descname"><span class="pre">flatten_to_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">space_sample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flat_space</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pufferlib.emulation.flatten_to_array" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </section>
