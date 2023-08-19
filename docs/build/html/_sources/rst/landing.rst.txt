@@ -89,59 +89,59 @@ User Guide
 
 **You can open this guide in a Colab notebook by clicking the demo button at the top of this page**
 
-Complex environments may have heirarchical observations and actions, variable numbers of agents, and other quirks that make them difficult to work with and incompatible with standard reinforcement learning libraries. PufferLib's emulation layer makes every environment look like it has flat observations and actions and a constant number of agents, with no changes to the underlying environment. Here's how it works with two notoriously complex environments, NetHack and Neural MMO:
+Complex environments may have heirarchical observations and actions, variable numbers of agents, and other quirks that make them difficult to work with and incompatible with standard reinforcement learning libraries. PufferLib's emulation layer makes every environment look like it has flat observations and actions and a constant number of agents, with no changes to the underlying environment. Here's how it works with two notoriously complex environments, NetHack and Neural MMO.
 
 .. code-block:: python
 
-    import pufferlib.emulation 
-    import nle
-    import nmmo
+  import pufferlib.emulation
 
-    nethack = pufferlib.emulation.GymPufferEnv(env_creator=nle.env.NLE)
-    neural_mmo = pufferlib.emulation.PettingZooPufferEnv(env_creator=nle.env.NLE)
+  import nle, nmmo
 
-You can pass envs by class, creator function, or object, with or without additional arguments. These wrappers enable us to make some optimizations to vectorization code that would be difficult to implement otherwise. You can choose from a variety of vectorization backends. They all share the same interface with synchronous and asynchronous options:
+  def nmmo_creator():
+      return pufferlib.emulation.PettingZooPufferEnv(env_creator=nmmo.Env)
 
-.. code-block:: python
+  def nethack_creator():
+      return pufferlib.emulation.GymPufferEnv(env_creator=nle.env.NLE)
 
-    import pufferlib.vectorization
- 
-    env_creator = lambda: pufferlib.emulation.GymPufferEnv(env_creator=nmmo.Env)
-
-    envs = pufferlib.vectorization.Serial(
-        env_creator, num_envs=2, num_workers=2)
-    envs = pufferlib.vectorization.Multiprocessing(
-        env_creator, num_envs=2, num_workers=2)
-    envs = pufferlib.vectorization.Multiprocessing(
-        env_creator, num_envs=2, num_workers=2)
-
-    # Synchronous vectorization
-    obs = envs.reset(seed=42)
-    obs, rewards, dones, infos = envs.step(actions)
-
-    # Asynchronous vectorization
-    envs.async_reset()
-    obs, rewards, dones, infos = envs.recv()
-    envs.send(actions)
-
-We suggest Serial for debugging and Multiprocessing for most training runs. Ray is a good option if you need to scale beyond a single machine. 
-
-PufferLib allows you to write vanilla PyTorch policies and use them with multiple learning libraries. We take care of the details of converting between the different APIs. Here's a policy that will work with *any* environment, with a one-line wrapper for CleanRL:
+You can pass envs by class, creator function, or object, with or without additional arguments. These wrappers enable us to make some optimizations to vectorization code that would be difficult to implement otherwise. You can choose from a variety of vectorization backends. They all share the same interface with synchronous and asynchronous options.
 
 .. code-block:: python
 
+  import pufferlib.vectorization
+
+  # vec = pufferlib.vectorization.Serial
+  vec = pufferlib.vectorization.Multiprocessing
+  # vec = pufferlib.vectorization.Ray
+
+  envs = vec(nmmo_creator, num_workers=2, envs_per_worker=2)
+
+  sync = True
+  if sync:
+      obs = envs.reset()
+  else:
+      envs.async_reset()
+      obs, _, _, _ = envs.recv()
+
+We suggest Serial for debugging and Multiprocessing for most training runs. Ray is a good option if you need to scale beyond a single machine.
+
+PufferLib allows you to write vanilla PyTorch policies and use them with multiple learning libraries. We take care of the details of converting between the different APIs. Here's a policy that will work with *any* environment, with a one-line wrapper for CleanRL.
+
+.. code-block:: python
+
+  import torch
   from torch import nn
+  import numpy as np
 
   import pufferlib.frameworks.cleanrl
 
-
-  class Default(Policy):
-      def __init__(self, envs, input_size=128, hidden_size=128):
+  class Policy(nn.Module):
+      def __init__(self, envs):
           super().__init__()
-          self.encoder = nn.Linear(np.prod(envs.single_observation_space.shape), hidden_size)
-          self.decoders = nn.ModuleList([nn.Linear(hidden_size, n)
-                  for n in envs.single_action_space.nvec])
-          self.value_head = nn.Linear(hidden_size, 1)
+          self.encoder = nn.Linear(np.prod(
+              envs.single_observation_space.shape), 128)
+          self.decoders = nn.ModuleList([nn.Linear(128, n)
+              for n in envs.single_action_space.nvec])
+          self.value_head = nn.Linear(128, 1)
 
       def forward(self, env_outputs):
           env_outputs = env_outputs.reshape(env_outputs.shape[0], -1)
@@ -150,50 +150,42 @@ PufferLib allows you to write vanilla PyTorch policies and use them with multipl
           value = self.value_head(hidden)
           return actions, value
 
-  CleanRLPolicy = pufferlib.frameworks.cleanrl.CleanRL(Default(envs))
+  obs = torch.Tensor(obs)
+  policy = Policy(envs)
+  cleanrl_policy = pufferlib.frameworks.cleanrl.Policy(policy)
+  actions = cleanrl_policy.get_action_and_value(obs)[0].numpy()
+  obs, rewards, dones, infos = envs.step(actions)
+  envs.close()
 
-There's also a lightweight, fully optional base policy class for PufferLib. It breaks the forward pass into two functions, encode_observations and decode_actions. The advantage of this is that it lets us handle recurrance for you, since every framework does this a bit differently. Our actual default policy is implemented this way, so we'll use it as an example:
+There's also a lightweight, fully optional base policy class for PufferLib. It breaks the forward pass into two functions, encode_observations and decode_actions. The advantage of this is that it lets us handle recurrance for you, since every framework does this a bit differently.
 
-.. code-block:: python
-
-  from torch import nn
-
-  import pufferlib.frameworks.cleanrl
-  import pufferlib.models
-
-  policy = pufferlib.models.Default(envs)
-  CleanRLPolicy = pufferlib.frameworks.cleanrl.CleanRL(policy)
-
-So far, the code above is fully general and does not rely on PufferLib support for specific environments. For convenience, we also provide a registry of environments and models. Here's a complete example:
+So far, the code above is fully general and does not rely on PufferLib support for specific environments. For convenience, we also provide a registry of environments and models. Here's a complete example.
 
 .. code-block:: python
 
   import torch
-  import nle
 
-  import pufferlib.emulation
+  import pufferlib.models
   import pufferlib.vectorization
   import pufferlib.frameworks.cleanrl
-  import pufferlib.models
+  import pufferlib.registry.nmmo
 
-  import pufferlib.registry.nethack
+  envs = pufferlib.vectorization.Multiprocessing(
+      env_creator=pufferlib.registry.nmmo.make_env,
+      num_workers=2, envs_per_worker=2)
 
+  policy = pufferlib.registry.nmmo.Policy(envs)
+  policy = pufferlib.models.RecurrentWrapper(envs, policy,
+      input_size=256, hidden_size=256)
+  cleanrl_policy = pufferlib.frameworks.cleanrl.Policy(policy)
 
-  make_env = pufferlib.registry.nethack.make_env
-  envs = pufferlib.vectorization.Serial(
-      env_creator=make_env, num_workers=2, envs_per_worker=2)
+  obs = envs.reset()
+  obs = torch.Tensor(obs)
+  actions = cleanrl_policy.get_action_and_value(obs)[0].numpy()
+  obs, rewards, dones, infos = envs.step(actions)
+  envs.close()
 
-  policy = pufferlib.registry.nethack.Policy(envs)
-  policy = pufferlib.models.Recurrent(policy)
-  policy = pufferlib.frameworks.cleanrl.Policy(policy)
-
-  # Standard environment loop
-  obs = envs.reset(seed=42)
-  for _ in range(32):
-      actions = policy.get_action_and_value(torch.Tensor(obs))[0].numpy()
-      obs, reward, done, info = envs.step(actions)
-
-It's that simple -- almost. One small quirk is that, because PufferLib flattens observations, you have to unflatten them in the network forward pass:
+It's that simple -- almost. If you have an environment with structured observations, you'll hvae to unpack them in the network forward pass since PufferLif will flatten them in emulation. We provide a utility for this -- just be sure to save a reference to your environment inside of the model so you have access to the observation space.
 
 .. code-block:: python
 
@@ -201,8 +193,7 @@ It's that simple -- almost. One small quirk is that, because PufferLib flattens 
       env_outputs, self.envs.flat_observation_space
   )
 
-Save a reference to your vectorized environments in the policy init method so you can access the flat observation space needed for this call.
-
+That's all you need to get started. The PufferLib repository contains full-length CleanRL scripts with PufferLib integration.
 
 Libraries
 #########

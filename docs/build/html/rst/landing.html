@@ -364,51 +364,51 @@ Contributors<div class="sd-summary-down docutils">
 </details><section id="user-guide">
 <h1>User Guide<a class="headerlink" href="#user-guide" title="Permalink to this heading">#</a></h1>
 <p><strong>You can open this guide in a Colab notebook by clicking the demo button at the top of this page</strong></p>
-<p>Complex environments may have heirarchical observations and actions, variable numbers of agents, and other quirks that make them difficult to work with and incompatible with standard reinforcement learning libraries. PufferLib’s emulation layer makes every environment look like it has flat observations and actions and a constant number of agents, with no changes to the underlying environment. Here’s how it works with two notoriously complex environments, NetHack and Neural MMO:</p>
+<p>Complex environments may have heirarchical observations and actions, variable numbers of agents, and other quirks that make them difficult to work with and incompatible with standard reinforcement learning libraries. PufferLib’s emulation layer makes every environment look like it has flat observations and actions and a constant number of agents, with no changes to the underlying environment. Here’s how it works with two notoriously complex environments, NetHack and Neural MMO.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pufferlib.emulation</span>
-<span class="kn">import</span> <span class="nn">nle</span>
-<span class="kn">import</span> <span class="nn">nmmo</span>
 
-<span class="n">nethack</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">emulation</span><span class="o">.</span><span class="n">GymPufferEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="o">=</span><span class="n">nle</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">NLE</span><span class="p">)</span>
-<span class="n">neural_mmo</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">emulation</span><span class="o">.</span><span class="n">PettingZooPufferEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="o">=</span><span class="n">nle</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">NLE</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">nle</span><span class="o">,</span> <span class="nn">nmmo</span>
+
+<span class="k">def</span> <span class="nf">nmmo_creator</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">emulation</span><span class="o">.</span><span class="n">PettingZooPufferEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="o">=</span><span class="n">nmmo</span><span class="o">.</span><span class="n">Env</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">nethack_creator</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">emulation</span><span class="o">.</span><span class="n">GymPufferEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="o">=</span><span class="n">nle</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">NLE</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>You can pass envs by class, creator function, or object, with or without additional arguments. These wrappers enable us to make some optimizations to vectorization code that would be difficult to implement otherwise. You can choose from a variety of vectorization backends. They all share the same interface with synchronous and asynchronous options:</p>
+<p>You can pass envs by class, creator function, or object, with or without additional arguments. These wrappers enable us to make some optimizations to vectorization code that would be difficult to implement otherwise. You can choose from a variety of vectorization backends. They all share the same interface with synchronous and asynchronous options.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pufferlib.vectorization</span>
 
-<span class="n">env_creator</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">emulation</span><span class="o">.</span><span class="n">GymPufferEnv</span><span class="p">(</span><span class="n">env_creator</span><span class="o">=</span><span class="n">nmmo</span><span class="o">.</span><span class="n">Env</span><span class="p">)</span>
+<span class="c1"># vec = pufferlib.vectorization.Serial</span>
+<span class="n">vec</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">vectorization</span><span class="o">.</span><span class="n">Multiprocessing</span>
+<span class="c1"># vec = pufferlib.vectorization.Ray</span>
 
-<span class="n">envs</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">vectorization</span><span class="o">.</span><span class="n">Serial</span><span class="p">(</span>
-    <span class="n">env_creator</span><span class="p">,</span> <span class="n">num_envs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">envs</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">vectorization</span><span class="o">.</span><span class="n">Multiprocessing</span><span class="p">(</span>
-    <span class="n">env_creator</span><span class="p">,</span> <span class="n">num_envs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">envs</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">vectorization</span><span class="o">.</span><span class="n">Multiprocessing</span><span class="p">(</span>
-    <span class="n">env_creator</span><span class="p">,</span> <span class="n">num_envs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">envs</span> <span class="o">=</span> <span class="n">vec</span><span class="p">(</span><span class="n">nmmo_creator</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">envs_per_worker</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
-<span class="c1"># Synchronous vectorization</span>
-<span class="n">obs</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<span class="n">obs</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">dones</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
-
-<span class="c1"># Asynchronous vectorization</span>
-<span class="n">envs</span><span class="o">.</span><span class="n">async_reset</span><span class="p">()</span>
-<span class="n">obs</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">dones</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
-<span class="n">envs</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+<span class="n">sync</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">if</span> <span class="n">sync</span><span class="p">:</span>
+    <span class="n">obs</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">envs</span><span class="o">.</span><span class="n">async_reset</span><span class="p">()</span>
+    <span class="n">obs</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>We suggest Serial for debugging and Multiprocessing for most training runs. Ray is a good option if you need to scale beyond a single machine.</p>
-<p>PufferLib allows you to write vanilla PyTorch policies and use them with multiple learning libraries. We take care of the details of converting between the different APIs. Here’s a policy that will work with <em>any</em> environment, with a one-line wrapper for CleanRL:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<p>PufferLib allows you to write vanilla PyTorch policies and use them with multiple learning libraries. We take care of the details of converting between the different APIs. Here’s a policy that will work with <em>any</em> environment, with a one-line wrapper for CleanRL.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">import</span> <span class="nn">pufferlib.frameworks.cleanrl</span>
 
-
-<span class="k">class</span> <span class="nc">Default</span><span class="p">(</span><span class="n">Policy</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">envs</span><span class="p">,</span> <span class="n">input_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Policy</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">envs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">envs</span><span class="o">.</span><span class="n">single_observation_space</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">hidden_size</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">decoders</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">([</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">envs</span><span class="o">.</span><span class="n">single_action_space</span><span class="o">.</span><span class="n">nvec</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">value_head</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span>
+            <span class="n">envs</span><span class="o">.</span><span class="n">single_observation_space</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="mi">128</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decoders</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">([</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">envs</span><span class="o">.</span><span class="n">single_action_space</span><span class="o">.</span><span class="n">nvec</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_head</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env_outputs</span><span class="p">):</span>
         <span class="n">env_outputs</span> <span class="o">=</span> <span class="n">env_outputs</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">env_outputs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
@@ -417,53 +417,46 @@ Contributors<div class="sd-summary-down docutils">
         <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_head</span><span class="p">(</span><span class="n">hidden</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">actions</span><span class="p">,</span> <span class="n">value</span>
 
-<span class="n">CleanRLPolicy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">frameworks</span><span class="o">.</span><span class="n">cleanrl</span><span class="o">.</span><span class="n">CleanRL</span><span class="p">(</span><span class="n">Default</span><span class="p">(</span><span class="n">envs</span><span class="p">))</span>
+<span class="n">obs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+<span class="n">policy</span> <span class="o">=</span> <span class="n">Policy</span><span class="p">(</span><span class="n">envs</span><span class="p">)</span>
+<span class="n">cleanrl_policy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">frameworks</span><span class="o">.</span><span class="n">cleanrl</span><span class="o">.</span><span class="n">Policy</span><span class="p">(</span><span class="n">policy</span><span class="p">)</span>
+<span class="n">actions</span> <span class="o">=</span> <span class="n">cleanrl_policy</span><span class="o">.</span><span class="n">get_action_and_value</span><span class="p">(</span><span class="n">obs</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">obs</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">dones</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+<span class="n">envs</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>There’s also a lightweight, fully optional base policy class for PufferLib. It breaks the forward pass into two functions, encode_observations and decode_actions. The advantage of this is that it lets us handle recurrance for you, since every framework does this a bit differently. Our actual default policy is implemented this way, so we’ll use it as an example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
-
-<span class="kn">import</span> <span class="nn">pufferlib.frameworks.cleanrl</span>
-<span class="kn">import</span> <span class="nn">pufferlib.models</span>
-
-<span class="n">policy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Default</span><span class="p">(</span><span class="n">envs</span><span class="p">)</span>
-<span class="n">CleanRLPolicy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">frameworks</span><span class="o">.</span><span class="n">cleanrl</span><span class="o">.</span><span class="n">CleanRL</span><span class="p">(</span><span class="n">policy</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>So far, the code above is fully general and does not rely on PufferLib support for specific environments. For convenience, we also provide a registry of environments and models. Here’s a complete example:</p>
+<p>There’s also a lightweight, fully optional base policy class for PufferLib. It breaks the forward pass into two functions, encode_observations and decode_actions. The advantage of this is that it lets us handle recurrance for you, since every framework does this a bit differently.</p>
+<p>So far, the code above is fully general and does not rely on PufferLib support for specific environments. For convenience, we also provide a registry of environments and models. Here’s a complete example.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">nle</span>
 
-<span class="kn">import</span> <span class="nn">pufferlib.emulation</span>
+<span class="kn">import</span> <span class="nn">pufferlib.models</span>
 <span class="kn">import</span> <span class="nn">pufferlib.vectorization</span>
 <span class="kn">import</span> <span class="nn">pufferlib.frameworks.cleanrl</span>
-<span class="kn">import</span> <span class="nn">pufferlib.models</span>
+<span class="kn">import</span> <span class="nn">pufferlib.registry.nmmo</span>
 
-<span class="kn">import</span> <span class="nn">pufferlib.registry.nethack</span>
+<span class="n">envs</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">vectorization</span><span class="o">.</span><span class="n">Multiprocessing</span><span class="p">(</span>
+    <span class="n">env_creator</span><span class="o">=</span><span class="n">pufferlib</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">nmmo</span><span class="o">.</span><span class="n">make_env</span><span class="p">,</span>
+    <span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">envs_per_worker</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
+<span class="n">policy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">nmmo</span><span class="o">.</span><span class="n">Policy</span><span class="p">(</span><span class="n">envs</span><span class="p">)</span>
+<span class="n">policy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">RecurrentWrapper</span><span class="p">(</span><span class="n">envs</span><span class="p">,</span> <span class="n">policy</span><span class="p">,</span>
+    <span class="n">input_size</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="n">cleanrl_policy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">frameworks</span><span class="o">.</span><span class="n">cleanrl</span><span class="o">.</span><span class="n">Policy</span><span class="p">(</span><span class="n">policy</span><span class="p">)</span>
 
-<span class="n">make_env</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">nethack</span><span class="o">.</span><span class="n">make_env</span>
-<span class="n">envs</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">vectorization</span><span class="o">.</span><span class="n">Serial</span><span class="p">(</span>
-    <span class="n">env_creator</span><span class="o">=</span><span class="n">make_env</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">envs_per_worker</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-
-<span class="n">policy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">nethack</span><span class="o">.</span><span class="n">Policy</span><span class="p">(</span><span class="n">envs</span><span class="p">)</span>
-<span class="n">policy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Recurrent</span><span class="p">(</span><span class="n">policy</span><span class="p">)</span>
-<span class="n">policy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">frameworks</span><span class="o">.</span><span class="n">cleanrl</span><span class="o">.</span><span class="n">Policy</span><span class="p">(</span><span class="n">policy</span><span class="p">)</span>
-
-<span class="c1"># Standard environment loop</span>
-<span class="n">obs</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">32</span><span class="p">):</span>
-    <span class="n">actions</span> <span class="o">=</span> <span class="n">policy</span><span class="o">.</span><span class="n">get_action_and_value</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">obs</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
-    <span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+<span class="n">obs</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="n">obs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
+<span class="n">actions</span> <span class="o">=</span> <span class="n">cleanrl_policy</span><span class="o">.</span><span class="n">get_action_and_value</span><span class="p">(</span><span class="n">obs</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">obs</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">dones</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+<span class="n">envs</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>It’s that simple – almost. One small quirk is that, because PufferLib flattens observations, you have to unflatten them in the network forward pass:</p>
+<p>It’s that simple – almost. If you have an environment with structured observations, you’ll hvae to unpack them in the network forward pass since PufferLif will flatten them in emulation. We provide a utility for this – just be sure to save a reference to your environment inside of the model so you have access to the observation space.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">env_outputs</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">emulation</span><span class="o">.</span><span class="n">unpack_batched_obs</span><span class="p">(</span>
     <span class="n">env_outputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">envs</span><span class="o">.</span><span class="n">flat_observation_space</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>Save a reference to your vectorized environments in the policy init method so you can access the flat observation space needed for this call.</p>
+<p>That’s all you need to get started. The PufferLib repository contains full-length CleanRL scripts with PufferLib integration.</p>
 </section>
 <section id="libraries">
 <h1>Libraries<a class="headerlink" href="#libraries" title="Permalink to this heading">#</a></h1>
