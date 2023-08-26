@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Environment Registry" href="examples.html" /><link rel="prev" title="Index" href="../index.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Emulation" href="api.html" /><link rel="prev" title="Index" href="../index.html" />
 
     <!-- Generated with Sphinx 5.0.0 and Furo 2023.03.27 -->
-        <title>User Guide - PufferLib 0.3.0 documentation</title>
+        <title>User Guide - PufferLib 0.4.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
@@ -190,7 +190,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">PufferLib 0.3.0 documentation</div></a>
+      <a href="../index.html"><div class="brand">PufferLib 0.4.0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -213,7 +213,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
   
-  <span class="sidebar-brand-text">PufferLib 0.3.0 documentation</span>
+  <span class="sidebar-brand-text">PufferLib 0.4.0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -228,14 +228,6 @@
 <li class="toctree-l1"><a class="reference internal" href="#environments">Environments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#current-limitations">Current Limitations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#license">License</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Environment Registry</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html#extended-atari-binding">Extended Atari Binding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html#minimal-cleanrl-demo">Minimal CleanRL Demo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html#custom-cleanrl-demo">Custom CleanRL Demo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html#rllib-demo">RLLib Demo</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API</span></p>
 <ul>
@@ -441,11 +433,12 @@ Contributors<div class="sd-summary-down docutils">
 <span class="n">policy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">nmmo</span><span class="o">.</span><span class="n">Policy</span><span class="p">(</span><span class="n">envs</span><span class="p">)</span>
 <span class="n">policy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">RecurrentWrapper</span><span class="p">(</span><span class="n">envs</span><span class="p">,</span> <span class="n">policy</span><span class="p">,</span>
     <span class="n">input_size</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
-<span class="n">cleanrl_policy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">frameworks</span><span class="o">.</span><span class="n">cleanrl</span><span class="o">.</span><span class="n">Policy</span><span class="p">(</span><span class="n">policy</span><span class="p">)</span>
+<span class="n">cleanrl_policy</span> <span class="o">=</span> <span class="n">pufferlib</span><span class="o">.</span><span class="n">frameworks</span><span class="o">.</span><span class="n">cleanrl</span><span class="o">.</span><span class="n">RecurrentPolicy</span><span class="p">(</span><span class="n">policy</span><span class="p">)</span>
 
 <span class="n">obs</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 <span class="n">obs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">obs</span><span class="p">)</span>
-<span class="n">actions</span> <span class="o">=</span> <span class="n">cleanrl_policy</span><span class="o">.</span><span class="n">get_action_and_value</span><span class="p">(</span><span class="n">obs</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">state</span> <span class="o">=</span> <span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">)),</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">))]</span>
+<span class="n">actions</span> <span class="o">=</span> <span class="n">cleanrl_policy</span><span class="o">.</span><span class="n">get_action_and_value</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">state</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
 <span class="n">obs</span><span class="p">,</span> <span class="n">rewards</span><span class="p">,</span> <span class="n">dones</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="n">envs</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
 <span class="n">envs</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
@@ -471,8 +464,13 @@ Contributors<div class="sd-summary-down docutils">
     <div>
         <p><a href="https://github.com/vwxyzjn/cleanrl">CleanRL</a> provides single-file RL implementations suited for 80+% of academic research. It was designed for simple environments like Atari, but with PufferLib, you can use it with just about anything.</p>
     </div>
-</div><p><span class="xref std std-ref">Minimal CleanRL Demo:</span> Shows how to integrate PufferLib with minimal code changes. Most users should start here.</p>
-<p><span class="xref std std-ref">CleanPuffeRL Demo:</span> Uses our heavily customized version of CleanRL PPO with optimizations for variable agent populations, self-play, and experiment management. Proudly supporting the NeurIPS 2023 Neural MMO Competition.</p>
+</div><div class="sd-card sd-sphinx-override sd-w-75 sd-mt-4 sd-mb-2 sd-ml-auto sd-mr-auto sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<p class="sd-card-text"><strong>Click to Demo PufferLib + CleanRL in Colab</strong></p>
+</div>
+<a class="sd-stretched-link reference external" href="https://colab.research.google.com/drive/1OMcaJnCAF1UiCJxKIxSS-RdZTuonItYT?usp=sharing"></a></div>
+<p>Or view it on GitHub <a class="reference external" href="https://github.com/PufferAI/PufferLib/blob/experimental/cleanrl_ppo_atari.py">here</a></p>
+<p>We are also working on a heavily customized version of CleanRL PPO with support for recurrent and non-recurrent models, async environment execution, variable agent populations, self-play, and experiment management. This is the version we use for our research and the NeurIPS 2023 Neural MMO Competition. It’s still under development, but you can try it out <a class="reference external" href="https://github.com/PufferAI/PufferLib/blob/experimental/clean_pufferl.py">here</a></p>
 <div style="display: flex; align-items: center; margin-bottom: 15px;">
     <div style="flex-shrink: 0; width: 100px; margin-right: 20px;">
         <a href="https://github.com/anyscale/ray" target="_blank">
@@ -482,7 +480,7 @@ Contributors<div class="sd-summary-down docutils">
     <div>
         <p><a href="https://docs.ray.io/">Ray</a> is a general purpose distributed computing framework that includes <a href="https://docs.ray.io/en/latest/rllib">RLlib</a>, an industry reinforcement learning library.</p>
     </div>
-</div><p><span class="xref std std-ref">RLlib Demo:</span> Shows how to integrate PufferLib RLlib.</p>
+</div><p>While RLlib is great on paper, there are currently a few issues. The pre-gymnasium 2.0 release is very buggy and has next to no error checking on the user API. The latest version may be more stable, but it pins a very recent version of Gymnasium that breaks compatiblity with many environments. We have a simple running script <a class="reference external" href="https://github.com/PufferAI/PufferLib/blob/experimental/rllib_ppo.py">here</a> that works with 2.0 for now. We will update this when the situation improves.</p>
 </section>
 <section id="environments">
 <h1>Environments<a class="headerlink" href="#environments" title="Permalink to this heading">#</a></h1>
@@ -614,12 +612,12 @@ Contributors<div class="sd-summary-down docutils">
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="examples.html">
+          <a class="next-page" href="api.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Environment Registry</div>
+                <div class="title">Emulation</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>

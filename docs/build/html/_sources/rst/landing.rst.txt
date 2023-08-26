@@ -177,11 +177,12 @@ So far, the code above is fully general and does not rely on PufferLib support f
   policy = pufferlib.registry.nmmo.Policy(envs)
   policy = pufferlib.models.RecurrentWrapper(envs, policy,
       input_size=256, hidden_size=256)
-  cleanrl_policy = pufferlib.frameworks.cleanrl.Policy(policy)
+  cleanrl_policy = pufferlib.frameworks.cleanrl.RecurrentPolicy(policy)
 
   obs = envs.reset()
   obs = torch.Tensor(obs)
-  actions = cleanrl_policy.get_action_and_value(obs)[0].numpy()
+  state = [torch.zeros((1, 256, 256)), torch.zeros((1, 256, 256))]
+  actions = cleanrl_policy.get_action_and_value(obs, state)[0].numpy()
   obs, rewards, dones, infos = envs.step(actions)
   envs.close()
 
@@ -215,11 +216,17 @@ PufferLib provides *pufferlib.frameworks* for the the learning libraries below. 
         </div>
     </div>
 
+.. card::
+  :link: https://colab.research.google.com/drive/1OMcaJnCAF1UiCJxKIxSS-RdZTuonItYT?usp=sharing
+  :width: 75%
+  :margin: 4 2 auto auto
+  :text-align: center
 
-:ref:`Minimal CleanRL Demo:` Shows how to integrate PufferLib with minimal code changes. Most users should start here.
+  **Click to Demo PufferLib + CleanRL in Colab**
 
-:ref:`CleanPuffeRL Demo:` Uses our heavily customized version of CleanRL PPO with optimizations for variable agent populations, self-play, and experiment management. Proudly supporting the NeurIPS 2023 Neural MMO Competition.
+Or view it on GitHub `here <https://github.com/PufferAI/PufferLib/blob/experimental/cleanrl_ppo_atari.py>`_
 
+We are also working on a heavily customized version of CleanRL PPO with support for recurrent and non-recurrent models, async environment execution, variable agent populations, self-play, and experiment management. This is the version we use for our research and the NeurIPS 2023 Neural MMO Competition. It's still under development, but you can try it out `here <https://github.com/PufferAI/PufferLib/blob/experimental/clean_pufferl.py>`_ 
 
 .. raw:: html
 
@@ -234,7 +241,7 @@ PufferLib provides *pufferlib.frameworks* for the the learning libraries below. 
         </div>
     </div>
 
-:ref:`RLlib Demo:` Shows how to integrate PufferLib RLlib.
+While RLlib is great on paper, there are currently a few issues. The pre-gymnasium 2.0 release is very buggy and has next to no error checking on the user API. The latest version may be more stable, but it pins a very recent version of Gymnasium that breaks compatiblity with many environments. We have a simple running script `here <https://github.com/PufferAI/PufferLib/blob/experimental/rllib_ppo.py>`_ that works with 2.0 for now. We will update this when the situation improves.
 
 Environments
 ############
