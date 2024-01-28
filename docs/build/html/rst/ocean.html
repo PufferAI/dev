@@ -245,6 +245,7 @@
 <li class="toctree-l1"><a class="reference internal" href="#stochastic">Stochastic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#memory">Memory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#multiagent">Multiagent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#spaces">Spaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#bandit">Bandit</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Blog</span></p>
@@ -500,6 +501,40 @@ Action space: Discrete(2). Which action to take.</p>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">action_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent</span></span></em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="spaces">
+<h1>Spaces<a class="headerlink" href="#spaces" title="Permalink to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pufferlib.environments.ocean.spaces.</span></span><span class="sig-name descname"><span class="pre">Spaces</span></span></dt>
+<dd><p>Pufferlib Spaces environment</p>
+<p>A simple environment with hierarchical observation and action spaces</p>
+<p>The image action should be 1 if the sum of the image is positive, 0 otherwise
+The flat action should be 1 if the sum of the flat obs is positive, 0 otherwise</p>
+<p>0.5 reward is given for each correct action</p>
+<p>Does not provide rendering</p>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
 <dd></dd></dl>
 
 </dd></dl>

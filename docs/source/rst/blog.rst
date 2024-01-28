@@ -14,7 +14,7 @@
 PufferLib 0.7: Puffing Up Performance with Shared Memory
 ########################################################
 
-This update doubles training throughput for most environments with no tradeoffs. We have tested Pokemon Red training at 6500 steps/second on a single desktop, up from around 3000, and Atari training at X steps/second, up from around Y. The approach is a combination of shared memory, PyTorch code optimizations, dependency upgrades, and model compilation.
+This update doubles training throughput for most environments with no tradeoffs. We have tested Pokemon Red training at over 6000 steps/second on a single desktop, up from around 3000. CleanRL trains Atari 65% faster just by switching to PufferLib's vectorization, without even enabling our extra async features. The approach is a combination of shared memory, PyTorch code optimizations, dependency upgrades, and model compilation.
 
 Sharing Memory with Vectorized Environments
 *******************************************
@@ -70,7 +70,7 @@ Thanks to Aleksei Petrenko, the creator of Sample Factory, for useful discussion
 
 
 PufferLib 0.6: 🐡🌊 An Ocean of Environments for Learning Pufferfish
-#####################################################
+####################################################################
 
 Ocean is a small suite of environments that train from scratch in 30 seconds and render in a terminal. Each environment is a sanity check for a common implementation bug. Use Ocean as a quick verification test whenever you make small code changes.
 

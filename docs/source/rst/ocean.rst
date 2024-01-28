@@ -46,6 +46,14 @@ Multiagent
    :undoc-members:
    :noindex:
 
+Spaces
+******
+
+.. autoclass:: pufferlib.environments.ocean.spaces.Spaces
+   :members:
+   :undoc-members:
+   :noindex:
+
 Bandit
 ******
 
