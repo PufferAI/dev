@@ -210,7 +210,7 @@ PufferLib provides *pufferlib.frameworks* for the the learning libraries below. 
     </div>
 
 .. card::
-  :link: https://colab.research.google.com/drive/1OMcaJnCAF1UiCJxKIxSS-RdZTuonItYT?usp=sharing
+  :link: https://colab.research.google.com/drive/1Zj4_vT36VlMsk0JHVx2cxxW27VdeS3mJ?usp=sharing
   :width: 75%
   :margin: 4 2 auto auto
   :text-align: center
