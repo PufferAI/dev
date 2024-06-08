@@ -420,4 +420,4 @@ Current Limitations
 License
 #######
 
-PufferLib is free and open-source software under the MIT license.
+PufferLib is free and open-source software under the MIT license. This is the full set of tools maintained by PufferAI. Dev branches are public and we do not have private repositories with additional utilities.
