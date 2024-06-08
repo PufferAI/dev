@@ -78,6 +78,8 @@ Join our community Discord for support and Discussion, follow my Twitter for new
 
    **thatguy**: Several performance improvements w/ torch compilation, major pokerl contributor.
 
+   **Kyoung Whan Choe (최경환)**: Testing and bug fixes
+
    **David Bloomin**: 0.4 policy pool/store/selector
 
    **Nick Jenkins**: Layout for the system architecture diagram. Adversary.design.
@@ -87,6 +89,9 @@ Join our community Discord for support and Discussion, follow my Twitter for new
    **Sara Earle**: Original pufferfish model. Hire her on UpWork if you like what you see here.
 
 **You can open this guide in a Colab notebook by clicking the demo button at the top of this page**
+
+Emulation
+#########
 
 Complex environments may have heirarchical observations and actions, variable numbers of agents, and other quirks that make them difficult to work with and incompatible with standard reinforcement learning libraries. PufferLib's emulation layer makes every environment look like it has flat observations/actions and a constant number of agents. Here's how it works with NetHack and Neural MMO, two notoriously complex environments.
 
@@ -188,6 +193,25 @@ It's that simple -- almost. If you have an environment with structured observati
   print('Unpacked:', env_outputs.keys())
 
 That's all you need to get started. The PufferLib repository contains full-length CleanRL scripts with PufferLib integration. Single-agent environments should work with SB3, and other integrations will be based on demand - so let us know what you want!
+
+Vectorization
+#############
+
+Our Multiprocessing backend is fast -- much faster than Gymnasium's in most cases. Atari runs 50-60% faster synchronous and 5x faster async by our latest benchmark, and some environments like NetHack can be 10x faster even synchronous, with no API changes. PufferLib implements the following optimizations:
+
+**A Python implementation of EnvPool.** Simulates more envs than are needed per batch and returns batches of observations as soon as they are ready. Requires using the async send/recv instead of the sync step API.
+
+**Multiple environments per worker.** Important for fast environments.
+
+**Shared memory.** Unlike Gymnasium's implementation, we use a single buffer that is shared across environments.
+
+**Shared flags.** Workers busy-wait on an unlocked flag instead of signaling via pipes or queues. This virtually eliminates interprocess communication overhead. Pipes are used once per episode to communicate aggregated infos.
+
+**Zero-copy batching.** Because we use a single buffer for shared memory, we can return observations from contiguous subsets of workers without ever copying observations. Only does not work for full-async mode.
+
+**Native multiagent support.** It's not an extra wrapper or slow bolt-on feature. PufferLib treats single-agent and multi-agent environments the same. API differences are handled at the emulation level.
+
+Most of these optimizations are made possible by a hard assumption on PufferLib emulation. This means that we do not need to handle structured data within the vectorization layer itself.
 
 Libraries
 #########
@@ -396,4 +420,4 @@ Current Limitations
 License
 #######
 
-PufferLib is free and open-source software under the MIT license. This is the full set of tools maintained by PufferAI. Dev branches are public and we do not have private repositories with additional utilities.
+PufferLib is free and open-source software under the MIT license.
